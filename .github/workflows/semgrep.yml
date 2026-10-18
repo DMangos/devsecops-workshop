@@ -21,7 +21,7 @@ jobs:
     steps:
       # Fetch the repo so Semgrep has sources to scan.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       # On a PR the author can still fix things, so findings block the merge.
       # --error makes Semgrep exit non-zero when a finding is reported.
@@ -51,7 +51,7 @@ jobs:
       # Publish the SARIF so findings show up under Security > Code scanning.
       - name: Upload SARIF to code scanning
         if: github.event_name == 'push'
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@ce5e7eeac396d720fe2d802714996c8ce561e311 # v3.39.0
         with:
           sarif_file: semgrep.sarif
           category: semgrep
