@@ -26,8 +26,6 @@ RUN dpkg -i trivy_0.76.1_Linux-64bit.deb && \
     rm trivy_0.76.1_Linux-64bit.deb
 
 COPY --chown=2000:2000 --chmod=755 cdxgen-linux-amd64 /usr/local/bin/cdxgen
-# RUN chmod +x cdxgen-linux-amd64 && \
-#     mv cdxgen-linux-amd64 /usr/local/bin/cdxgen
 
 USER 2000:2000
 
