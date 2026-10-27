@@ -96,28 +96,32 @@ jobs:
           sarif_file: trivy-frontend.sarif
           category: trivy-frontend
 
-      # Separate test_title per image so reimport updates the right test
-      # instead of the two images overwriting each other.
+      # One engagement per image, matching the Dependency-Track project that
+      # the native DT integration imports into. Trivy and DT then land as two
+      # tests in the same engagement -- different scan_type, so they coexist
+      # rather than overwrite, and dedup can merge them if both parsers share
+      # the same hashcode configuration.
       - name: Publish Trivy results to DefectDojo
         env:
           DD_URL: ${{ secrets.DEFECTDOJO_URL }}
           DD_TOKEN: ${{ secrets.DEFECTDOJO_TOKEN }}
           DD_PRODUCT: devsecops-workshop
-          DD_ENGAGEMENT: main-branch-containers
+          DD_ENGAGEMENT_API: dt-api-image
+          DD_ENGAGEMENT_FRONTEND: dt-frontend-image
           COMMIT: ${{ github.sha }}
           BRANCH: ${{ github.ref_name }}
           BUILD_ID: ${{ github.run_id }}
         run: |
           upload() {
-            local file="$1" title="$2"
-            echo "Uploading ${file} as test '${title}'"
+            local file="$1" title="$2" engagement="$3"
+            echo "Uploading ${file} as test '${title}' in engagement '${engagement}'"
             curl -sS --fail-with-body \
               -X POST "${DD_URL%/}/api/v2/reimport-scan/" \
               -H "Authorization: Token ${DD_TOKEN}" \
               -F "scan_type=Trivy Scan" \
               -F "file=@${file}" \
               -F "product_name=${DD_PRODUCT}" \
-              -F "engagement_name=${DD_ENGAGEMENT}" \
+              -F "engagement_name=${engagement}" \
               -F "test_title=${title}" \
               -F "auto_create_context=true" \
               -F "close_old_findings=true" \
@@ -129,5 +133,35 @@ jobs:
             echo
           }
 
-          upload trivy-api.json trivy-api
-          upload trivy-frontend.json trivy-frontend
+          upload trivy-api.json trivy-api "$DD_ENGAGEMENT_API"
+          upload trivy-frontend.json trivy-frontend "$DD_ENGAGEMENT_FRONTEND"
+
+      - name: Upload image SBOMs as artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: image-sbom
+          path: sbom-*-image.json
+
+      # Separate projects from the cdxgen source SBOMs in sbom.yml. A BOM
+      # upload replaces a project's component list, so image and source SBOMs
+      # must not share a project or they overwrite each other.
+      - name: Publish image SBOMs to Dependency-Track
+        env:
+          DT_URL: ${{ secrets.DEPENDENCYTRACK_URL }}
+          DT_KEY: ${{ secrets.DEPENDENCYTRACK_API_KEY }}
+          DT_PROJECT_API_IMAGE: ${{ vars.DT_PROJECT_API_IMAGE }}
+          DT_PROJECT_FRONTEND_IMAGE: ${{ vars.DT_PROJECT_FRONTEND_IMAGE }}
+        run: |
+          upload() {
+            local file="$1" project="$2"
+            echo "Uploading ${file} -> project ${project}"
+            curl -sS --fail-with-body \
+              -X POST "${DT_URL%/}/api/v1/bom" \
+              -H "X-Api-Key: ${DT_KEY}" \
+              -F "project=${project}" \
+              -F "bom=@${file}"
+            echo
+          }
+
+          upload sbom-api-image.json "$DT_PROJECT_API_IMAGE"
+          upload sbom-frontend-image.json "$DT_PROJECT_FRONTEND_IMAGE"
