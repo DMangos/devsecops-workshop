@@ -105,9 +105,10 @@ jobs:
         env:
           DD_URL: ${{ secrets.DEFECTDOJO_URL }}
           DD_TOKEN: ${{ secrets.DEFECTDOJO_TOKEN }}
-          DD_PRODUCT: devsecops-workshop
-          DD_ENGAGEMENT_API: dt-api-image
-          DD_ENGAGEMENT_FRONTEND: dt-frontend-image
+          DD_ENGAGEMENT: ${{ vars.DEFECTDOJO_ENGAGEMENT }}
+          DD_PRODUCT: ${{ vars.DEFECTDOJO_PRODUCT }}
+          DD_ENGAGEMENT_API: ${{ vars.DEFECTDOJO_ENGAGEMENT_API }}
+          DD_ENGAGEMENT_FRONTEND: ${{ vars.DEFECTDOJO_ENGAGEMENT_FRONTEND }}
           COMMIT: ${{ github.sha }}
           BRANCH: ${{ github.ref_name }}
           BUILD_ID: ${{ github.run_id }}
