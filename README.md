@@ -13,16 +13,24 @@ locally — these are CI-only.
 
 ### Repository variables
 
-| Name                        | Used by              | Value                                                                    |
-| --------------------------- | -------------------- | ------------------------------------------------------------------------ |
-| `DOCKERHUB_USERNAME`        | `docker-publish.yml` | Your Docker Hub namespace, e.g. `mysindieiev`. Used as the image prefix. |
-| `DT_PROJECT_API`            | `app-sbom.yml`       | Dependency-Track project UUID for the api **source** SBOM (cdxgen).      |
-| `DT_PROJECT_FRONTEND`       | `app-sbom.yml`       | Dependency-Track project UUID for the frontend **source** SBOM (cdxgen). |
-| `DT_PROJECT_API_IMAGE`      | `docker-publish.yml` | Dependency-Track project UUID for the api **image** SBOM (Trivy).        |
-| `DT_PROJECT_FRONTEND_IMAGE` | `docker-publish.yml` | Dependency-Track project UUID for the frontend **image** SBOM (Trivy).   |
+| Name                             | Used by                              | Value                                                                              |
+| -------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------- |
+| `DOCKERHUB_USERNAME`             | `docker-publish.yml`                 | Your Docker Hub namespace, e.g. `mysindieiev`. Used as the image prefix and login. |
+| `DEFECTDOJO_PRODUCT`             | `semgrep.yml`, `docker-publish.yml`  | DefectDojo product everything files under, e.g. `devsecops-workshop`.              |
+| `DEFECTDOJO_ENGAGEMENT`          | `semgrep.yml`                        | Engagement for Semgrep SAST findings, e.g. `security-scan`.                        |
+| `DEFECTDOJO_ENGAGEMENT_API`      | `docker-publish.yml`                 | Engagement for api container findings, e.g. `dt-api-image`.                        |
+| `DEFECTDOJO_ENGAGEMENT_FRONTEND` | `docker-publish.yml`                 | Engagement for frontend container findings, e.g. `dt-frontend-image`.              |
+| `DT_PROJECT_API`                 | `app-sbom.yml`                       | Dependency-Track project UUID for the api **source** SBOM (cdxgen).                |
+| `DT_PROJECT_FRONTEND`            | `app-sbom.yml`                       | Dependency-Track project UUID for the frontend **source** SBOM (cdxgen).           |
+| `DT_PROJECT_API_IMAGE`           | `docker-publish.yml`                 | Dependency-Track project UUID for the api **image** SBOM (Trivy).                  |
+| `DT_PROJECT_FRONTEND_IMAGE`      | `docker-publish.yml`                 | Dependency-Track project UUID for the frontend **image** SBOM (Trivy).             |
 
 Project UUIDs come from the Dependency-Track project page URL:
 `/projects/<uuid>`.
+
+The container engagements are named after the matching Dependency-Track
+projects so Trivy and the native DT integration land in the same engagement,
+as two tests under different scan types.
 
 Source and image SBOMs need **separate** projects. A BOM upload replaces a
 project's component list, so pointing both at one project makes them
@@ -40,9 +48,9 @@ overwrite each other on every run.
 
 ### What needs what
 
-| Workflow             | Required configuration                                                   |
-| -------------------- | ------------------------------------------------------------------------ |
-| `pre-commit.yml`     | none                                                                     |
-| `semgrep.yml`        | `DEFECTDOJO_*` (SARIF upload to code scanning needs no config)           |
-| `docker-publish.yml` | `DOCKERHUB_*`, `DT_PROJECT_*_IMAGE`, `DEPENDENCYTRACK_*`, `DEFECTDOJO_*` |
-| `app-sbom.yml`       | `DT_PROJECT_API`, `DT_PROJECT_FRONTEND`, `DEPENDENCYTRACK_*`             |
+| Workflow             | Required configuration                                                                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pre-commit.yml`     | none                                                                                                                                                          |
+| `semgrep.yml`        | `DEFECTDOJO_PRODUCT`, `DEFECTDOJO_ENGAGEMENT`, `DEFECTDOJO_URL`, `DEFECTDOJO_TOKEN` (SARIF upload to code scanning needs no config)                           |
+| `docker-publish.yml` | `DOCKERHUB_*`, `DEFECTDOJO_PRODUCT`, `DEFECTDOJO_ENGAGEMENT_API`, `DEFECTDOJO_ENGAGEMENT_FRONTEND`, `DT_PROJECT_*_IMAGE`, `DEPENDENCYTRACK_*`, `DEFECTDOJO_*` |
+| `app-sbom.yml`       | `DT_PROJECT_API`, `DT_PROJECT_FRONTEND`, `DEPENDENCYTRACK_*`                                                                                                  |
