@@ -65,8 +65,8 @@ jobs:
         env:
           DD_URL: ${{ secrets.DEFECTDOJO_URL }}
           DD_TOKEN: ${{ secrets.DEFECTDOJO_TOKEN }}
-          DD_PRODUCT: devsecops-workshop
-          DD_ENGAGEMENT: security-scan
+          DD_PRODUCT: ${{ vars.DEFECTDOJO_PRODUCT }}
+          DD_ENGAGEMENT: ${{ vars.DEFECTDOJO_ENGAGEMENT }}
           COMMIT: ${{ github.sha }}
           BRANCH: ${{ github.ref_name }}
           BUILD_ID: ${{ github.run_id }}
