@@ -147,7 +147,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: image-sbom
-          path: sbom-*-image.json
+          path: trivy-*-image.json
 
       # Separate projects from the cdxgen source SBOMs in sbom.yml. A BOM
       # upload replaces a project's component list, so image and source SBOMs
