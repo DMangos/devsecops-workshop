@@ -95,6 +95,7 @@ jobs:
           sarif_file: trivy-api.sarif
           category: trivy-api
 
+      # Same, under its own category for the frontend image.
       - name: Upload frontend SARIF to code scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
