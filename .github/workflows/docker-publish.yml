@@ -170,5 +170,5 @@ jobs:
             echo
           }
 
-          upload sbom-api-image.json "$DT_PROJECT_API_IMAGE"
-          upload sbom-frontend-image.json "$DT_PROJECT_FRONTEND_IMAGE"
+          upload trivy-api-image.json "$DT_PROJECT_API_IMAGE"
+          upload trivy-frontend-image.json "$DT_PROJECT_FRONTEND_IMAGE"
