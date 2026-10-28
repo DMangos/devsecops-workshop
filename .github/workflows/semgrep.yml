@@ -12,6 +12,8 @@ jobs:
   semgrep:
     name: SAST scan
     runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
     permissions:
       contents: read
       security-events: write # only used by the SARIF upload on main
@@ -20,16 +22,6 @@ jobs:
       # Fetch the repo so Semgrep has sources to scan.
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Semgrep ships as a Python package, so it needs an interpreter.
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      # Install the scanner itself.
-      - name: Install Semgrep
-        run: pip install semgrep
 
       # On a PR the author can still fix things, so findings block the merge.
       # --error makes Semgrep exit non-zero when a finding is reported.
