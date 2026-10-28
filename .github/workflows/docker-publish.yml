@@ -59,6 +59,15 @@ jobs:
           trivy convert --format table trivy-api-image.json
           trivy convert --format sarif --output trivy-api.sarif trivy-api-image.json
 
+      # Separate run from the scan above: that report is severity-filtered,
+      # while an SBOM needs the image's full package inventory.
+      - name: Generate api image SBOM
+        run: |
+          trivy image \
+            --format cyclonedx \
+            --output sbom-api-image.json \
+            "$NAMESPACE/devsecops-workshop-api:$IMAGE_TAG"
+
       # Publish the api image to Docker Hub.
       - name: Push api
         run: docker push "$NAMESPACE/devsecops-workshop-api:$IMAGE_TAG"
@@ -80,6 +89,14 @@ jobs:
             "$NAMESPACE/devsecops-workshop-frontend:$IMAGE_TAG"
           trivy convert --format table trivy-frontend-image.json
           trivy convert --format sarif --output trivy-frontend.sarif trivy-frontend-image.json
+
+      # Same full-inventory SBOM as the api image above.
+      - name: Generate frontend image SBOM
+        run: |
+          trivy image \
+            --format cyclonedx \
+            --output sbom-frontend-image.json \
+            "$NAMESPACE/devsecops-workshop-frontend:$IMAGE_TAG"
 
       # Publish the frontend image to Docker Hub.
       - name: Push frontend
