@@ -1,5 +1,6 @@
 name: Semgrep
 
+# Run on pull requests into main and on pushes to main.
 on:
   pull_request:
     branches: [main]
@@ -7,6 +8,7 @@ on:
     branches: [main]
 
 jobs:
+  # Static analysis: blocks on PRs, reports to the Security tab and DefectDojo on main.
   semgrep:
     name: SAST scan
     runs-on: ubuntu-latest
@@ -15,14 +17,17 @@ jobs:
       security-events: write # only used by the SARIF upload on main
 
     steps:
+      # Fetch the repo so Semgrep has sources to scan.
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Semgrep ships as a Python package, so it needs an interpreter.
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
+      # Install the scanner itself.
       - name: Install Semgrep
         run: pip install semgrep
 
@@ -51,6 +56,7 @@ jobs:
             --sarif-output=semgrep.sarif \
             --json-output=semgrep.json
 
+      # Publish the SARIF so findings show up under Security > Code scanning.
       - name: Upload SARIF to code scanning
         if: github.event_name == 'push'
         uses: github/codeql-action/upload-sarif@v3
