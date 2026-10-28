@@ -26,6 +26,7 @@ RUN dpkg -i trivy_0.76.1_Linux-64bit.deb && \
     rm trivy_0.76.1_Linux-64bit.deb
 
 COPY --chown=2000:2000 --chmod=755 cdxgen-linux-amd64 /usr/local/bin/cdxgen
+COPY --chown=2000:2000 --chmod=755 gitleaks /usr/local/bin/gitleaks
 
 USER 2000:2000
 
