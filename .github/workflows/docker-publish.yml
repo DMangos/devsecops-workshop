@@ -52,12 +52,12 @@ jobs:
         run: |
           trivy image \
             --format json \
-            --output trivy-api.json \
-            --severity CRITICAL,HIGH \
+            --output trivy-api-image.json \
+            --severity CRITICAL,HIGH,MEDIUM \
             --ignore-unfixed \
             "$NAMESPACE/devsecops-workshop-api:$IMAGE_TAG"
-          trivy convert --format table trivy-api.json
-          trivy convert --format sarif --output trivy-api.sarif trivy-api.json
+          trivy convert --format table trivy-api-image.json
+          trivy convert --format sarif --output trivy-api.sarif trivy-api-image.json
 
       # Publish the api image to Docker Hub.
       - name: Push api
@@ -74,12 +74,12 @@ jobs:
         run: |
           trivy image \
             --format json \
-            --output trivy-frontend.json \
-            --severity CRITICAL,HIGH \
+            --output trivy-frontend-image.json \
+            --severity CRITICAL,HIGH,MEDIUM \
             --ignore-unfixed \
             "$NAMESPACE/devsecops-workshop-frontend:$IMAGE_TAG"
-          trivy convert --format table trivy-frontend.json
-          trivy convert --format sarif --output trivy-frontend.sarif trivy-frontend.json
+          trivy convert --format table trivy-frontend-image.json
+          trivy convert --format sarif --output trivy-frontend.sarif trivy-frontend-image.json
 
       # Publish the frontend image to Docker Hub.
       - name: Push frontend
@@ -139,8 +139,8 @@ jobs:
             echo
           }
 
-          upload trivy-api.json trivy-api "$DD_ENGAGEMENT_API"
-          upload trivy-frontend.json trivy-frontend "$DD_ENGAGEMENT_FRONTEND"
+          upload trivy-api-image.json trivy-api "$DD_ENGAGEMENT_API"
+          upload trivy-frontend-image.json trivy-frontend "$DD_ENGAGEMENT_FRONTEND"
 
       # Keep the image SBOMs downloadable from the run summary.
       - name: Upload image SBOMs as artifacts
