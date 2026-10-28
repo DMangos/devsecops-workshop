@@ -167,6 +167,7 @@ jobs:
           name: image-sbom
           path: trivy-*-image.json
 
+<<<<<<< HEAD
       # Separate projects from the cdxgen source SBOMs in sbom.yml. A BOM
       # upload replaces a project's component list, so image and source SBOMs
       # must not share a project or they overwrite each other.
@@ -190,3 +191,5 @@ jobs:
 
           upload sbom-api-image.json "$DT_PROJECT_API_IMAGE"
           upload sbom-frontend-image.json "$DT_PROJECT_FRONTEND_IMAGE"
+=======
+>>>>>>> d8ae893 (remove unused step)
