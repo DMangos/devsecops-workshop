@@ -33,6 +33,7 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Pin the Trivy binary used by the image scans below.
       - name: Set up Trivy
         uses: aquasecurity/setup-trivy@v0.3.1
         with:
@@ -40,6 +41,7 @@ jobs:
 
       # ----- api -----
 
+      # Build the api image from ./api.
       - name: Build api
         run: docker build -t "$NAMESPACE/devsecops-workshop-api:$IMAGE_TAG" ./api
 
@@ -57,6 +59,7 @@ jobs:
           trivy convert --format table trivy-api.json
           trivy convert --format sarif --output trivy-api.sarif trivy-api.json
 
+      # Publish the api image to Docker Hub.
       - name: Push api
         run: docker push "$NAMESPACE/devsecops-workshop-api:$IMAGE_TAG"
 
@@ -66,6 +69,7 @@ jobs:
       - name: Build frontend
         run: docker build -t "$NAMESPACE/devsecops-workshop-frontend:$IMAGE_TAG" ./frontend
 
+      # Same scan-then-convert flow as the api image above.
       - name: Scan frontend image
         run: |
           trivy image \
@@ -77,6 +81,7 @@ jobs:
           trivy convert --format table trivy-frontend.json
           trivy convert --format sarif --output trivy-frontend.sarif trivy-frontend.json
 
+      # Publish the frontend image to Docker Hub.
       - name: Push frontend
         run: docker push "$NAMESPACE/devsecops-workshop-frontend:$IMAGE_TAG"
 
@@ -137,6 +142,7 @@ jobs:
           upload trivy-api.json trivy-api "$DD_ENGAGEMENT_API"
           upload trivy-frontend.json trivy-frontend "$DD_ENGAGEMENT_FRONTEND"
 
+      # Keep the image SBOMs downloadable from the run summary.
       - name: Upload image SBOMs as artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
