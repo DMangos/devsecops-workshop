@@ -34,6 +34,6 @@ Project UUIDs come from the Dependency-Track project page URL:
 | ------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `DOCKERHUB_TOKEN`         | `docker-publish.yml`                 | Docker Hub access token with Read/Write scope. Create under _Account Settings → Personal access tokens_. Use a token, not your password. |
 | `DEPENDENCYTRACK_URL`     | `app-sbom.yml`, `docker-publish.yml` | Base URL of the Dependency-Track API server, e.g. `https://dtrack.bashlab.org`.                                                          |
-| `DEPENDENCYTRACK_API_KEY` | `app-sbom.yml`, `docker-publish.yml` | Dependency-Track API key. _Administration → Access Management → Teams → API Keys_. Needs `BOM_UPLOAD`.                                   |
+| `DEPENDENCYTRACK_API_KEY` | `app-sbom.yml`, `docker-publish.yml` | Dependency-Track API key.                                                                                                                |
 | `DEFECTDOJO_URL`          | `semgrep.yml`, `docker-publish.yml`  | Base URL of DefectDojo, e.g. `https://defectdojo.bashlab.org`                                                                            |
 | `DEFECTDOJO_TOKEN`        | `semgrep.yml`, `docker-publish.yml`  | DefectDojo API v2 key, from the user profile page.                                                                                       |
