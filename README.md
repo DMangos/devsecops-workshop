@@ -13,17 +13,17 @@ locally — these are CI-only.
 
 ### Repository variables
 
-| Name                             | Used by                             | Value                                                                           |
-| -------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------- |
-| `DOCKERHUB_USERNAME`             | `docker-publish.yml`                | Docker Hub namespace, e.g. `mikesindieiev`. Used as the image prefix and login. |
-| `DEFECTDOJO_PRODUCT`             | `semgrep.yml`, `docker-publish.yml` | DefectDojo product name, e.g. `01-project`.                                     |
-| `DEFECTDOJO_ENGAGEMENT`          | `semgrep.yml`                       | Engagement name for Semgrep SAST findings, e.g. ` 01-sast-security-scan`.       |
-| `DEFECTDOJO_ENGAGEMENT_API`      | `docker-publish.yml`                | Engagement name for api container findings, e.g. `01-api-image`.                |
-| `DEFECTDOJO_ENGAGEMENT_FRONTEND` | `docker-publish.yml`                | Engagement name for frontend container findings, e.g. `01-frontend-image`.      |
-| `DT_PROJECT_API`                 | `app-sbom.yml`                      | Dependency-Track project UUID for the api **source** SBOM (cdxgen).             |
-| `DT_PROJECT_FRONTEND`            | `app-sbom.yml`                      | Dependency-Track project UUID for the frontend **source** SBOM (cdxgen).        |
-| `DT_PROJECT_API_IMAGE`           | `docker-publish.yml`                | Dependency-Track project UUID for the api **image** SBOM (Trivy).               |
-| `DT_PROJECT_FRONTEND_IMAGE`      | `docker-publish.yml`                | Dependency-Track project UUID for the frontend **image** SBOM (Trivy).          |
+| Name                             | Used by                             | Value                                                                                                    |
+| -------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `DOCKERHUB_USERNAME`             | `docker-publish.yml`                | Docker Hub namespace, e.g. `mikesindieiev`. Used as the image prefix and login.                          |
+| `DEFECTDOJO_PRODUCT`             | `semgrep.yml`, `docker-publish.yml` | DefectDojo product name, e.g. `01-project`.                                                              |
+| `DEFECTDOJO_ENGAGEMENT`          | `semgrep.yml`                       | Engagement name for Semgrep SAST findings, e.g. ` 01-sast-security-scan`.                                |
+| `DEFECTDOJO_ENGAGEMENT_API`      | `docker-publish.yml`                | Engagement name for api container findings, e.g. `01-api-image`.                                         |
+| `DEFECTDOJO_ENGAGEMENT_FRONTEND` | `docker-publish.yml`                | Engagement name for frontend container findings, e.g. `01-frontend-image`.                               |
+| `DT_PROJECT_API`                 | `app-sbom.yml`                      | Dependency-Track project **UUID** for the api **source** SBOM (cdxgen) project - `01-api`.               |
+| `DT_PROJECT_FRONTEND`            | `app-sbom.yml`                      | Dependency-Track project **UUID** for the frontend **source** SBOM (cdxgen) project - `01-frontend`.     |
+| `DT_PROJECT_API_IMAGE`           | `docker-publish.yml`                | Dependency-Track project **UUID** for the api **image** SBOM (Trivy) project - `01-api-image`.           |
+| `DT_PROJECT_FRONTEND_IMAGE`      | `docker-publish.yml`                | Dependency-Track project **UUID** for the frontend **image** SBOM (Trivy) project - `01-frontend-image`. |
 
 Project UUIDs come from the Dependency-Track project page URL:
 `/projects/<uuid>`.
