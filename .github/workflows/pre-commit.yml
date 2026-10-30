@@ -17,7 +17,7 @@ jobs:
     steps:
       # Fetch the repo so the hooks have files to check.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # pre-commit is a Python tool, so it needs an interpreter available.
       - name: Set up Python

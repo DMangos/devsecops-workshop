@@ -24,7 +24,7 @@ jobs:
     steps:
       # Fetch the repo so the Dockerfiles and sources are available.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Authenticate so the push steps below are allowed.
       - name: Log in to Docker Hub
