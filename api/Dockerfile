@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.9.24-alpine3.22
+FROM --platform=linux/amd64 python:3.14.5-alpine3.22
 
 COPY --chown=2000:2000 . /mnt/app
 
